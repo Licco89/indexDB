@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+    <title>大苏网</title>
+    <link rel="stylesheet" type="text/css" href="css/style-min.css">
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/db-min.js"></script>
+    <script type="text/javascript" src="js/common-min.js"></script>
+    <script type="text/javascript" src="js/order-min.js"></script>
+</head>
+
+<body class="my body">
+    <div id="order">
+        <span><img src="img/back.png" class="back"></span>
+        <div class="my_top my_top02">订购</div>
+        <p class="f_title">服务项目</p>
+        <p class="f_title003">APP开发服务</p>
+        <p class="f_title004">承接相关APP的开发，包括android及IOS系统，根据客户需 求，出产品方案及流程图。
+        </p>
+        <p class="f_title">姓名</p>
+        <label class="f_label f_label_t_bor">
+            <input type="text" placeholder="姓名" id="name">
+        </label>
+        <p class="f_title">手机号码</p>
+        <label class="f_label f_label_t_bor">
+            <input type="tel" id="phone" maxLength="11" placeholder="电话">
+        </label>
+        <div class="e_bottom">
+            <span class="e_btn e_btn002" id="save">确认订购</span>
+        </div>
+    </div>
+    <div id="success" style="display:none;">
+        <span><img src="img/back.png" class="back"></span>
+        <div class="my_top my_top02">订购成功</div>
+        <img src="img/yyys.png" class="s_img">
+        <div class="s_box_tex">
+            <p class="s_tit">恭喜！服务已订购成功</p>
+            <div class="s_text02">
+                <p>服务项目：<span id="service_title"></span></p>
+                <p>服务内容：<span id="service_desc"></span></p>
+            </div>
+        </div>
+        <div class="e_bottom">
+            <span class="e_btn e_btn_none" id="back_index">返回首页</span>
+            <span class="e_btn" id="check_order">查看订单</span>
+        </div>
+    </div>
+</body>
+
+</html>

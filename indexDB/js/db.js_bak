@@ -1,0 +1,139 @@
+function initIndexedDB(dbName, dbVersion, tables, callback) {
+	var dbName = dbName; //数据库名称
+	var dbVersion = dbVersion; //数据库版本
+	var tablename = tablename; //表名
+	var tableKey = config.tableKey; //主键
+	var indexList = config.indexList; //索引
+	var db = {};
+	var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
+
+	/* if ('webkitIndexedDB' in window) {
+	window.IDBTransaction = window.webkitIDBTransaction;
+	window.IDBKeyRange = window.webkitIDBKeyRange;
+	} */
+	var request = indexedDB.open(dbName, dbVersion);
+
+	request.onupgradeneeded = function (e) {
+		//异步
+		var curDB = e.currentTarget.result;
+		for (var j=0;j<tables.length;j++) {
+			var tablename = tables[j].tablename;
+			var tableKey = tables[j].tableKey;
+			var indexList = tables[j].indexList;
+			if (curDB.objectStoreNames.contains(tablename)) {
+				curDB.deleteObjectStore(tablename);
+			}
+			var store = curDB.createObjectStore(tablename, {
+					keyPath : tableKey
+				}); //onsuccess 后创建ObjectStore  暂时用到两个参数，数据库&&主键
+			//创建索引
+			if (indexList && indexList.length > 0) {
+				for (var i = 0; i < indexList.length; i++) {
+					store.createIndex(indexList[i].name, indexList[i].element, {
+						unique : indexList[i].unique
+					});
+				}
+			}
+		}
+
+	}
+
+	request.onsuccess = function (e) { //异步
+		var trans = db.transaction([tablename], "readwrite"); //创建transaction
+		var store = trans.objectStore(tablename); //创建Store
+		//要操作数据必须建立transaction 和 Store
+		var request = store.get("admin");
+		request.onsuccess = function (e) {
+			//成功后执行一些操作
+			if (tableName == "user") {
+				//新增默认管理员账号
+				store.add({
+					name : "admin",
+					password : "admin",
+					isadmin : "1"
+				});
+				//新增默认用户
+				store.add({
+					name : "chemeng",
+					password : "123456",
+					isadmin : "0"
+				})
+			};
+		};
+
+		db = e.target.result;
+
+		/* DBObj.addDataInDB = function (data, sucFn, errFn) {
+		//插入数据 暂时只插入一列
+		var trans = db.transaction([tablename], "readwrite"); //创建transaction
+		var store = trans.objectStore(tablename); //创建Store
+		//要操作数据必须建立transaction 和 Store
+		var request = store.put(data);
+		request.onsuccess = function (e) {
+		//成功后执行一些操作
+		sucFn && sucFn(e);
+		};
+		request.onerror = function (e) {
+		console.log("Error Adding: ", e);
+		errFn && errFn(e);
+		};
+
+		}
+
+		DBObj.getAllDataFromDB = function () {
+		//读取数据
+		var trans = db.transaction(tablename);
+		var store = trans.objectStore(tablename);
+
+		var keyRange = IDBKeyRange.lowerBound(0);
+		var cursorRequest = store.openCursor(keyRange);
+		//这里用到指针cursor ,openCursor的参数 keyRange是遍历范围 还可以添加遍历方向参数
+		//另一种方法是get() 这个就比较简单了直接store.get('键值')就行
+
+		cursorRequest.onsuccess = function (e) {
+		var result = e.target.result;
+		if (!!result == false)
+		return;
+
+		console.log(result.value);
+		result.continue(); //循环读取所有数据
+		};
+		}
+
+		DBObj.getDataByIndex = function (indexName, value, sucFn) {
+		//读取数据
+		var trans = db.transaction(tablename);
+		var store = trans.objectStore(tablename);
+		var queryIndex = store.index(indexName);
+		indexName.get(value).onsuccess = function (event) {
+		console.log(event.target.result);
+		sucFn && sucFn(event.target.result)
+		};
+		}
+
+		DBObj.getDataByKey = function (value, sucFn) {
+		//读取数据
+		var trans = db.transaction(tablename);
+		var store = trans.objectStore(tablename);
+		store.get(value).onsuccess = function (event) {
+		console.log(event.target.result);
+		sucFn && sucFn(event.target.result)
+		};
+		}
+
+		DBObj.deleteDataInDB = function (value, sucFn) {
+		//读取数据
+		var trans = db.transaction(tablename, "readwrite");
+		var store = trans.objectStore(tablename);
+		store.delete (value).onsuccess = function (event) {
+		console.log(event.target.result);
+		sucFn && sucFn(event.target.result)
+		};
+		}
+		callback(DBObj);
+		}; */
+		request.onerror = function (e) { //异步
+			console.log(e);
+		};
+
+	}
